@@ -1,0 +1,35 @@
+name: Tests Pull Request
+on:
+  - pull_request
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13.x
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: nancy
+        uses: sonatype-nexus-community/nancy-github-action@master
+        with:
+          target: go.sum
+      - name: golangci-lint
+        env:
+          GOROOT: /go
+        run: |
+          docker pull golangci/golangci-lint:latest-alpine
+          docker run --rm -v ${PWD}:/app -w /app golangci/golangci-lint:latest-alpine golangci-lint run
+      - name: unittests
+        run: go test -race -cover -coverprofile=coverage.txt -covermode=atomic -cpu 1,2 -bench . -benchmem ./... > test.log
+      - name: Show log
+        if: always()
+        run: cat test.log
+      - name: Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.txt
+          yml: ./.codecov.yml

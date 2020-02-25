@@ -1,0 +1,15 @@
+project_name: smoker
+
+release:
+  github:
+    owner: amad
+    name: smoker
+builds:
+  - binary: smoker
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+    main: ./cmd/smoker/smoker.go
+    ldflags: -s -w -X github.com/amad/smoker/version.version={{ .Tag }}
