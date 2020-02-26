@@ -13,7 +13,7 @@ release:
 
 builds:
   - <<: &build_defaults
-      binary: bin/smoker
+      binary: smoker
       main: ./cmd/smoker/smoker.go
       ldflags:
         - -s -w -X github.com/amad/smoker/version.version={{ .Tag }}
@@ -35,9 +35,6 @@ archives:
       darwin: macOS
     format: tar.gz
 
-checksum:
-  name_template: 'checksums.txt'
-
 changelog:
   sort: asc
   filters:
@@ -45,14 +42,3 @@ changelog:
     - '^docs:'
     - '^test:'
     - '^build:'
-
-# brews:
-# - name: smoker
-#   github:
-#     owner: amad
-#     name: homebrew-smoker
-#   description: Fast smoke-testing tool for APIs and WEB with concurrency support.
-#   homepage: https://github.com/amad/smoker
-#   test: |
-#     help_text = shell_output("#{bin}/smoker --help")
-#     assert_includes help_text, "Usage:"
