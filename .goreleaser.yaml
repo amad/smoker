@@ -46,13 +46,13 @@ changelog:
     - '^test:'
     - '^build:'
 
-brews:
-- name: gh
-  github:
-    owner: amad
-    name: homebrew-smoker
-  description: Fast smoke-testing tool for APIs and WEB with concurrency support.
-  homepage: https://github.com/amad/smoker
-  test: |
-    help_text = shell_output("#{bin}/smoker --help")
-    assert_includes help_text, "Usage:"
+# brews:
+# - name: smoker
+#   github:
+#     owner: amad
+#     name: homebrew-smoker
+#   description: Fast smoke-testing tool for APIs and WEB with concurrency support.
+#   homepage: https://github.com/amad/smoker
+#   test: |
+#     help_text = shell_output("#{bin}/smoker --help")
+#     assert_includes help_text, "Usage:"
