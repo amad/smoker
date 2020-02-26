@@ -83,7 +83,7 @@ func TestOutput(t *testing.T) {
 				oldArgs := os.Args
 				os.Args = tc.args
 
-				InstallFlags("version", os.Stdout)
+				_, _ = InstallFlags("version", os.Stdout)
 
 				os.Args = oldArgs
 

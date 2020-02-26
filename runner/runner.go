@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"sync"
 	"time"
 
@@ -150,9 +151,15 @@ func (r *Runner) getPoolsize(ts *core.Testsuite) int {
 }
 
 func (r *Runner) printfOut(msg string, params ...interface{}) {
-	r.stdout.WriteString(fmt.Sprintf(msg, params...) + "\n")
+	_, err := r.stdout.WriteString(fmt.Sprintf(msg, params...) + "\n")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func (r *Runner) printfErrOut(msg string, params ...interface{}) {
-	r.stderr.WriteString(fmt.Sprintf(msg, params...) + "\n")
+	_, err := r.stderr.WriteString(fmt.Sprintf(msg, params...) + "\n")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
