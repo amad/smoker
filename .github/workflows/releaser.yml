@@ -1,28 +1,25 @@
-name: Release
+name: goreleaser
+
 on:
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
-  milestone:
-    types: [closed]
+      - "v*"
 
 jobs:
   goreleaser:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
-      -
-        name: Unshallow
-        run: git fetch --prune --unshallow
-      -
-        name: Set up Go
+      - name: Set up Go
         uses: actions/setup-go@v1
         with:
           go-version: 1.13.x
-      -
-        name: Run GoReleaser
+      - name: Generate changelog
+        run: |
+          git fetch --unshallow
+          script/changelog | tee CHANGELOG.md
+      - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:
           version: latest

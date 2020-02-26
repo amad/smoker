@@ -1,15 +1,57 @@
 project_name: smoker
 
+before:
+  hooks:
+    - go mod tidy
+    - go mod download
+
 release:
   github:
     owner: amad
     name: smoker
+  prerelease: auto
+
 builds:
-  - binary: smoker
-    goos:
-      - darwin
-      - linux
-    goarch:
-      - amd64
-    main: ./cmd/smoker/smoker.go
-    ldflags: -s -w -X github.com/amad/smoker/version.version={{ .Tag }}
+  - <<: &build_defaults
+      binary: bin/smoker
+      main: ./cmd/smoker/smoker.go
+      ldflags:
+        - -s -w -X github.com/amad/smoker/version.version={{ .Tag }}
+    id: macos
+    goos: [darwin]
+    goarch: [amd64]
+  - <<: *build_defaults
+    id: linux
+    goos: [linux]
+    goarch: [386, amd64, arm64]
+
+archives:
+  - id: nix
+    builds: [macos, linux]
+    <<: &archive_defaults
+      name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    wrap_in_directory: true
+    replacements:
+      darwin: macOS
+    format: tar.gz
+
+checksum:
+  name_template: 'checksums.txt'
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+
+brews:
+- name: gh
+  github:
+    owner: amad
+    name: homebrew-smoker
+  description: Fast smoke-testing tool for APIs and WEB with concurrency support.
+  homepage: https://github.com/amad/smoker
+  test: |
+    help_text = shell_output("#{bin}/smoker --help")
+    assert_includes help_text, "Usage:"

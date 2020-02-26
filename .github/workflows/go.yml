@@ -1,35 +1,54 @@
-name: Tests Pull Request
-on:
-  - pull_request
 
+name: Tests
+on: [push, pull_request]
 jobs:
-  tests:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
     steps:
-      - name: Install Go
+      - name: Set up Go 1.13
         uses: actions/setup-go@v1
         with:
-          go-version: 1.13.x
+          go-version: 1.13
+
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Verify dependencies
+        run: go mod verify
+
       - name: nancy
         uses: sonatype-nexus-community/nancy-github-action@master
         with:
           target: go.sum
+
+      - name: Lint
+        run: go vet ./...
+
       - name: golangci-lint
         env:
           GOROOT: /go
         run: |
           docker pull golangci/golangci-lint:latest-alpine
           docker run --rm -v ${PWD}:/app -w /app golangci/golangci-lint:latest-alpine golangci-lint run
-      - name: unittests
+
+      - name: Tests
         run: go test -race -cover -coverprofile=coverage.txt -covermode=atomic -cpu 1,2 -bench . -benchmem ./... > test.log
+
       - name: Show log
         if: always()
         run: cat test.log
+
       - name: Codecov
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.txt
           yml: ./.codecov.yml
+
+      - name: Build
+        run: go build -v -o smoker ./cmd/smoker

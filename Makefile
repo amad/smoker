@@ -1,7 +1,7 @@
 BUILD_NUMBER=$(shell git rev-parse --short HEAD)
 
 build:
-	go build -o smoker ./cmd/smoker
+	go build -v -o smoker ./cmd/smoker
 
 clean:
 	rm -f smoker
@@ -10,6 +10,7 @@ clean:
 
 lint:
 	go vet ./...
+	staticcheck ./...
 
 test:
 	go test -race -v -covermode=atomic ./...
@@ -24,8 +25,3 @@ release: clean
 	GOOS=linux  GOARCH=amd64 go build -o "bin/smoker_linux_amd64" ./cmd/smoker
 	GOOS=linux  GOARCH=386   go build -o "bin/smoker_linux_386" ./cmd/smoker
 	tar -zvcf dist/smoker-$(BUILD_NUMBER).tar.gz bin/smoker*
-
-re:
-	echo $(BUILD_NUMBER)
-	tar -zvcf dist/smoker-$(BUILD_NUMBER).tar.gz bin/smoker*
-	gpg --sign ./dist/smoker-$(BUILD_NUMBER).tar.gz
