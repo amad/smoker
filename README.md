@@ -1,5 +1,6 @@
 # Smoker
 
+![Tests](https://github.com/amad/smoker/workflows/Tests/badge.svg?branch=master)
 [![Build Status](https://travis-ci.org/amad/smoker.svg?branch=master)](https://travis-ci.org/amad/smoker)
 [![Go Report Card](https://goreportcard.com/badge/github.com/amad/smoker)](https://goreportcard.com/report/github.com/amad/smoker)
 [![codecov](https://codecov.io/gh/amad/smoker/branch/master/graph/badge.svg)](https://codecov.io/gh/amad/smoker)
