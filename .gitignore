@@ -16,3 +16,4 @@ vendor/
 
 bin/smoker*
 dist/smoker*
+/CHANGELOG.md
