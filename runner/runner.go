@@ -1,6 +1,7 @@
 package runner
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -14,17 +15,19 @@ import (
 
 // NewRunner creates and returns a new Runner.
 func NewRunner(workers int, timeout time.Duration, stopOnFailure bool, stdout io.StringWriter, stderr io.StringWriter) *Runner {
-	closeChan := make(chan struct{}, workers)
 	reports := []core.TestResult{}
+
+	ctx, cancelFunc := context.WithCancel(context.Background())
 
 	return &Runner{
 		workers:       workers,
 		timeout:       timeout,
 		stopOnFailure: stopOnFailure,
-		closeChan:     closeChan,
 		stdout:        stdout,
 		stderr:        stderr,
 		reports:       reports,
+		ctx:           ctx,
+		cancelFunc:    cancelFunc,
 	}
 }
 
@@ -33,9 +36,10 @@ type Runner struct {
 	workers        int
 	timeout        time.Duration
 	stopOnFailure  bool
-	closeChan      chan struct{}
 	stdout, stderr io.StringWriter
 	reports        []core.TestResult
+	ctx            context.Context
+	cancelFunc     context.CancelFunc
 }
 
 // Run smoke test on a testsuite and provides results.
@@ -59,21 +63,21 @@ func (r *Runner) Run(requester core.Requester, testsuite *core.Testsuite) (bool,
 	go r.reportWriter(&wg, reportsChan)
 
 	for i, tc := range testsuite.Tests {
+		poolChan <- struct{}{}
+
 		if r.isClosing() {
 			break
 		}
 
-		poolChan <- struct{}{}
 		wg.Add(2) // delta=2 to sync worker and reportWriter.
-
 		go r.worker(&wg, requester, i+1, tc, poolChan, reportsChan)
 	}
 
 	wg.Wait()
 
-	close(r.closeChan)
 	close(reportsChan)
 	close(poolChan)
+	defer r.cancelFunc()
 
 	r.printfOut("\nElapsed: %.2fs", time.Since(start).Seconds())
 
@@ -110,16 +114,15 @@ func (r *Runner) worker(wg *sync.WaitGroup, requester core.Requester, idx int, t
 // Stop pauses off the runner.
 // used for signal handling or when stop on failure is enabled.
 func (r *Runner) Stop() {
-	r.closeChan <- struct{}{}
+	r.cancelFunc()
 }
 
 func (r *Runner) isClosing() bool {
-	select {
-	case <-r.closeChan:
+	if err := r.ctx.Err(); err != nil {
 		return true
-	default:
-		return false
 	}
+
+	return false
 }
 
 func (r *Runner) shouldStopOnFailure() {

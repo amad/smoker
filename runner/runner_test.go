@@ -3,7 +3,6 @@ package runner
 import (
 	"bytes"
 	"errors"
-	"reflect"
 	"testing"
 	"time"
 
@@ -16,25 +15,7 @@ func TestNewRunner(t *testing.T) {
 	var workers = 5
 	var buffer *bytes.Buffer
 
-	r := NewRunner(workers, time.Second, false, buffer, buffer)
-
-	if cap(r.closeChan) != workers {
-		t.Fatalf("Expected close channel capacity to be equal to number of workers %d but got %d", workers, cap(r.closeChan))
-	}
-
-	expected := &Runner{
-		workers,
-		time.Second,
-		false,
-		r.closeChan,
-		buffer,
-		buffer,
-		[]core.TestResult{},
-	}
-
-	if !reflect.DeepEqual(expected, r) {
-		t.Fatalf("response %+v %+v", expected, r)
-	}
+	NewRunner(workers, time.Second, false, buffer, buffer)
 }
 
 func newTestRunner(workers int, timeout int, stopOnFailure bool) *Runner {
@@ -146,7 +127,7 @@ func TestRunner(t *testing.T) {
 			"stop on failure",
 			&core.Testsuite{Tests: []core.TestCase{{Name: "fail"}, {}, {}}},
 			true,
-			1,
+			0,
 			1,
 		},
 	}
