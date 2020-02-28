@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/textproto"
 	"regexp"
 	"strings"
 	"time"
@@ -92,6 +93,23 @@ func (r *Requester) Request(tc core.TestCase) (bool, error) {
 			res, err := regexp.MatchString(matchInBody, bodyStr)
 			if err != nil || !res {
 				return false, fmt.Errorf("can not match /%s/ in response body", matchInBody)
+			}
+		}
+	}
+
+	if len(tc.Assertions.MatchInHeader) != 0 {
+		for matchHeaderName, matchHeaderValue := range tc.Assertions.MatchInHeader {
+			canonicalHeaderName := textproto.CanonicalMIMEHeaderKey(matchHeaderName)
+
+			headerValue, foundHeader := res.Header[canonicalHeaderName]
+
+			if !foundHeader {
+				return false, fmt.Errorf("unable to find response header %s", canonicalHeaderName)
+			}
+
+			matched, err := regexp.MatchString(matchHeaderValue, headerValue[0])
+			if err != nil || !matched {
+				return false, fmt.Errorf("expected response header %s:%s received %s:%s", canonicalHeaderName, matchHeaderValue, canonicalHeaderName, headerValue[0])
 			}
 		}
 	}

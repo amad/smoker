@@ -35,6 +35,7 @@ type TestCase struct {
 
 // Assertions describes expectations on each test case.
 type Assertions struct {
-	StatusCode  int      `json:"statusCode"`
-	MatchInBody []string `json:"matchInBody"`
+	StatusCode    int               `json:"statusCode"`
+	MatchInBody   []string          `json:"matchInBody"`
+	MatchInHeader map[string]string `json:"matchInHeader"`
 }

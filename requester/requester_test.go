@@ -36,6 +36,7 @@ func TestRequest(t *testing.T) {
 		tc             core.TestCase
 		mockStatusCode int
 		mockResBody    string
+		mockResHeader  map[string]string
 		expectErr      string
 	}{
 		{
@@ -115,6 +116,43 @@ func TestRequest(t *testing.T) {
 			mockStatusCode: 200,
 			mockResBody:    "123-45678",
 		},
+		{
+			name: "errors when can not match header",
+			tc: core.TestCase{
+				Name: "test",
+				URL:  "example.com",
+				Assertions: core.Assertions{
+					MatchInHeader: map[string]string{"Content-Type": "application/json"},
+				},
+			},
+			mockStatusCode: 200,
+			mockResHeader:  map[string]string{"Content-Type": "text/html"},
+			expectErr:      "expected response header Content-Type:application/json received Content-Type:text/html",
+		},
+		{
+			name: "errors when expected header not found",
+			tc: core.TestCase{
+				Name: "test",
+				URL:  "example.com",
+				Assertions: core.Assertions{
+					MatchInHeader: map[string]string{"Content-Type": "application/json"},
+				},
+			},
+			mockStatusCode: 200,
+			expectErr:      "unable to find response header Content-Type",
+		},
+		{
+			name: "can match header",
+			tc: core.TestCase{
+				Name: "test",
+				URL:  "example.com",
+				Assertions: core.Assertions{
+					MatchInHeader: map[string]string{"content-type": "application/json"},
+				},
+			},
+			mockStatusCode: 200,
+			mockResHeader:  map[string]string{"Content-Type": "application/json"},
+		},
 	}
 
 	for _, item := range tt {
@@ -154,10 +192,16 @@ func TestRequest(t *testing.T) {
 					}
 				}
 
+				resHeader := make(http.Header)
+
+				for hn, hv := range item.mockResHeader {
+					resHeader.Add(hn, hv)
+				}
+
 				return &http.Response{
 					StatusCode: item.mockStatusCode,
 					Body:       ioutil.NopCloser(bytes.NewBufferString(item.mockResBody)),
-					Header:     make(http.Header),
+					Header:     resHeader,
 				}
 			})
 			requester := &Requester{
