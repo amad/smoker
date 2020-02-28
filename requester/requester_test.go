@@ -48,8 +48,8 @@ func TestRequest(t *testing.T) {
 				Headers: map[string]string{"Content-Type": "application/json"},
 				Body:    "OK",
 				Assertions: core.Assertions{
-					StatusCode:  200,
-					MatchInBody: []string{"OK"},
+					StatusCode: 200,
+					Body:       []string{"OK"},
 				},
 			},
 			mockStatusCode: 200,
@@ -97,7 +97,7 @@ func TestRequest(t *testing.T) {
 				Name: "test",
 				URL:  "example.com",
 				Assertions: core.Assertions{
-					MatchInBody: []string{"OK"},
+					Body: []string{"OK"},
 				},
 			},
 			mockStatusCode: 200,
@@ -110,7 +110,7 @@ func TestRequest(t *testing.T) {
 				Name: "test",
 				URL:  "example.com",
 				Assertions: core.Assertions{
-					MatchInBody: []string{"^[0-9]{3}-[0-9]{5}$"},
+					Body: []string{"^[0-9]{3}-[0-9]{5}$"},
 				},
 			},
 			mockStatusCode: 200,
@@ -122,7 +122,7 @@ func TestRequest(t *testing.T) {
 				Name: "test",
 				URL:  "example.com",
 				Assertions: core.Assertions{
-					MatchInHeader: map[string]string{"Content-Type": "application/json"},
+					Header: map[string]string{"Content-Type": "application/json"},
 				},
 			},
 			mockStatusCode: 200,
@@ -135,7 +135,7 @@ func TestRequest(t *testing.T) {
 				Name: "test",
 				URL:  "example.com",
 				Assertions: core.Assertions{
-					MatchInHeader: map[string]string{"Content-Type": "application/json"},
+					Header: map[string]string{"Content-Type": "application/json"},
 				},
 			},
 			mockStatusCode: 200,
@@ -147,11 +147,11 @@ func TestRequest(t *testing.T) {
 				Name: "test",
 				URL:  "example.com",
 				Assertions: core.Assertions{
-					MatchInHeader: map[string]string{"content-type": "application/json"},
+					Header: map[string]string{"access-control-allow-origin": "*", "content-length": "[0-9]+"},
 				},
 			},
 			mockStatusCode: 200,
-			mockResHeader:  map[string]string{"Content-Type": "application/json"},
+			mockResHeader:  map[string]string{"access-control-allow-origin": "*", "content-length": "23432"},
 		},
 	}
 
