@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/textproto"
 	"regexp"
 	"strings"
 	"time"
@@ -80,7 +81,7 @@ func (r *Requester) Request(tc core.TestCase) (bool, error) {
 		return false, fmt.Errorf("expected status-code: %d received: %d", tc.Assertions.StatusCode, res.StatusCode)
 	}
 
-	if len(tc.Assertions.MatchInBody) != 0 {
+	if len(tc.Assertions.Body) != 0 {
 		body, err := ioutil.ReadAll(res.Body)
 		if err != nil {
 			return false, fmt.Errorf("unable to read the response body with with error: %w", err)
@@ -88,10 +89,31 @@ func (r *Requester) Request(tc core.TestCase) (bool, error) {
 
 		bodyStr := string(body)
 
-		for _, matchInBody := range tc.Assertions.MatchInBody {
+		for _, matchInBody := range tc.Assertions.Body {
 			res, err := regexp.MatchString(matchInBody, bodyStr)
 			if err != nil || !res {
 				return false, fmt.Errorf("can not match /%s/ in response body", matchInBody)
+			}
+		}
+	}
+
+	if len(tc.Assertions.Header) != 0 {
+		for expectedHeaderName, expectedHeaderValue := range tc.Assertions.Header {
+			canonicalHeaderName := textproto.CanonicalMIMEHeaderKey(expectedHeaderName)
+
+			headerValue, foundHeader := res.Header[canonicalHeaderName]
+
+			if !foundHeader {
+				return false, fmt.Errorf("unable to find response header %s", canonicalHeaderName)
+			}
+
+			if strings.EqualFold(expectedHeaderValue, headerValue[0]) {
+				continue
+			}
+
+			matched, err := regexp.MatchString(expectedHeaderValue, headerValue[0])
+			if err != nil || !matched {
+				return false, fmt.Errorf("expected response header %s:%s received %s:%s", canonicalHeaderName, expectedHeaderValue, canonicalHeaderName, headerValue[0])
 			}
 		}
 	}

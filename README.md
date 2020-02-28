@@ -82,10 +82,13 @@ A test case can have all the following parameters to give you more control on wh
       },
       "assertions": {
         "statusCode": 200,
-        "matchInBody": [
+        "body": [
           "github",
           "[a-z]"
-        ]
+        ],
+        "header": {
+          "Content-Type": "application/json"
+        }
       }
     }
   ]
@@ -130,13 +133,15 @@ Example:
 }
 ```
 
-You can make assertion on HTTP status code, and also assert whether the response contains any match of the provided regular expression or simple string.
+You can make assertion on HTTP status code, and also assert whether the response contains any match of the provided regular expression or simple string. You can also make assertion on response header.
 
 Test case fails if the HTTP status code does not match, Or any of the assertion in body do not match.
 
 The `assertions.statusCode` field accepts a HTTP status code to check. The default value for this field is `200`.
 
-The `assertions.matchInBody` field accepts an array of strings that can contain simple string or regex. When this field isn't provided, Smoker does not make any assertions on response body.
+The `assertions.body` field accepts an array of strings that can contain simple string or regex. When this field isn't provided, Smoker does not make any assertions on response body.
+
+The `assertions.header` field accepts a map of strings. When this field isn't provided, Smoker does not make any assertions on response header. You can use regular expression to match header value. But, you must provide full header name.
 
 Example:
 
@@ -148,11 +153,15 @@ Example:
       "url": "https://github.com/amad/NotFoundRepo",
       "assertions": {
         "statusCode": 404,
-        "matchInBody": [
+        "body": [
           "Github",
           "Page not found",
           "[a-z]"
-        ]
+        ],
+        "header": {
+          "Content-Type": "application/json",
+          "X-Requestid": "*"
+        }
       }
     }
   ]

@@ -6,14 +6,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        go-version: [1.13.x]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Set up Go 1.13
+      - name: Set up Go
         uses: actions/setup-go@v1
         with:
-          go-version: 1.13
+          go-version: ${{ matrix.go-version }}
 
       - name: Checkout code
         uses: actions/checkout@v2
