@@ -12,8 +12,20 @@ Describe test cases in JSON format. Each test case can define URL, HTTP method, 
 
 ## Installation
 
+### From source
+
 ```txt
 go get github.com/amad/smoker/cmd/smoker
+```
+
+### Download pre-compiled
+
+```bash
+# Find latest version: https://github.com/amad/smoker/releases
+curl -o smoker.tar.gz -L https://github.com/amad/smoker/releases/download/v0.2.0/smoker_0.2.0_linux_amd64.tar.gz
+tar -zxvf smoker.tar.gz --strip-components 1
+chmod +x ./smoker
+./smoker -version
 ```
 
 ### Requirements
