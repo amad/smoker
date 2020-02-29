@@ -40,21 +40,27 @@ chmod +x ./smoker
 
 ## Usage
 
-Run a testsuite:
+Run smoke-api.json testsuite file:
 
-```txt
+```bash
 smoker -testsuite smoke-api.json
+```
+
+Using docker image:
+
+```bash
+docker run --rm -v (PWD):/data stunt/smoker:latest -testsuite /data/smoke-api.json
 ```
 
 Run with 15 workers and set global timeout to 5 seconds:
 
-```txt
+```bash
 smoker -testsuite smoke-api.json -workers 15 -timeout 5
 ```
 
 Run with `-stop-on-failure` flag to stop execution if any test-case fails:
 
-```txt
+```bash
 smoker -testsuite smoke-api.json -stop-on-failure
 ```
 
