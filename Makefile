@@ -37,3 +37,7 @@ release: clean
 	GOOS=linux  GOARCH=386   go build -o "bin/smoker_linux_386" ./cmd/smoker
 	tar -zvcf dist/smoker-$(BUILD_NUMBER).tar.gz bin/smoker*
 .PHONY: release
+
+docker:
+	docker build --tag smoker:(git describe --abbrev=0) .
+.PHONY: docker

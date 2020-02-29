@@ -18,7 +18,7 @@ jobs:
       - name: Generate changelog
         run: |
           git fetch --unshallow
-          script/changelog | tee CHANGELOG.md
+          scripts/changelog | tee CHANGELOG.md
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v1
         with:

@@ -14,8 +14,14 @@ Describe test cases in JSON format. Each test case can define URL, HTTP method, 
 
 ### From source
 
-```txt
+```bash
 go get github.com/amad/smoker/cmd/smoker
+```
+
+### Docker
+
+```bash
+docker pull stunt/smoker:latest
 ```
 
 ### Download pre-compiled
