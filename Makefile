@@ -38,6 +38,6 @@ release: clean
 	tar -zvcf dist/smoker-$(BUILD_NUMBER).tar.gz bin/smoker*
 .PHONY: release
 
-docker:
-	docker build --tag smoker:(git describe --abbrev=0) .
+dockerbuild:
+	docker build --tag smoker:$(git describe --abbrev=0) .
 .PHONY: docker

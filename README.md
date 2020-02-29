@@ -50,7 +50,7 @@ smoker -testsuite smoke-api.json
 Using docker image:
 
 ```bash
-docker run --rm -v (PWD):/data stunt/smoker:latest -testsuite /data/smoke-api.json
+docker run --rm -v $(PWD):/data stunt/smoker:latest -testsuite /data/smoke-api.json
 ```
 
 Run with 15 workers and set global timeout to 5 seconds:
