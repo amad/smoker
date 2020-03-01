@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "name": "Github.com is live",
+      "url": "https://github.com"
+    },
+    {
+      "name": "Github.com about shows copyright notice",
+      "url": "https://github.com/about",
+      "assertions": {
+        "body": [
+          "&copy; [0-9]{4} GitHub, Inc\\."
+        ]
+      }
+    },
+    {
+      "name": "Github repos API does not accept POST request",
+      "url": "https://api.github.com/repos/amad/smoker",
+      "method": "post",
+      "headers": {
+        "Accept": "application/json"
+      },
+      "assertions": {
+        "statusCode": 404
+      }
+    },
+    {
+      "name": "Github fetch user. This fails without valid token",
+      "url": "https://api.github.com/user",
+      "method": "post",
+      "headers": {
+        "Authorization": "token GITHUB_TOKEN_PLACEHOLDER"
+      }
+    }
+  ]
+}

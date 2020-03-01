@@ -50,7 +50,7 @@ smoker -testsuite smoke-api.json
 Using docker image:
 
 ```bash
-docker run --rm -v $(PWD):/data stunt/smoker:latest -testsuite /data/smoke-api.json
+docker run --rm -v $(PWD):/data stunt/smoker -testsuite /data/smoke-api.json
 ```
 
 Run with 15 workers and set global timeout to 5 seconds:
@@ -111,7 +111,7 @@ A test case can have all the following parameters to give you more control on wh
           "github",
           "[a-z]"
         ],
-        "header": {
+        "headers": {
           "Content-Type": "application/json"
         }
       }
@@ -183,7 +183,7 @@ Example:
           "Page not found",
           "[a-z]"
         ],
-        "header": {
+        "headers": {
           "Content-Type": "application/json",
           "X-Requestid": "*"
         }

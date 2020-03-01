@@ -97,8 +97,8 @@ func (r *Requester) Request(tc core.TestCase) (bool, error) {
 		}
 	}
 
-	if len(tc.Assertions.Header) != 0 {
-		for expectedHeaderName, expectedHeaderValue := range tc.Assertions.Header {
+	if len(tc.Assertions.Headers) != 0 {
+		for expectedHeaderName, expectedHeaderValue := range tc.Assertions.Headers {
 			canonicalHeaderName := textproto.CanonicalMIMEHeaderKey(expectedHeaderName)
 
 			headerValue, foundHeader := res.Header[canonicalHeaderName]
