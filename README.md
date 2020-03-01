@@ -29,7 +29,7 @@ docker pull stunt/smoker:latest
 
 ```bash
 # Find latest version: https://github.com/amad/smoker/releases
-curl -o smoker.tar.gz -L https://github.com/amad/smoker/releases/download/v0.2.0/smoker_0.2.0_linux_amd64.tar.gz
+curl -o smoker.tar.gz -L https://github.com/amad/smoker/releases/download/v0.3.0/smoker_0.3.0_linux_amd64.tar.gz
 tar -zxvf smoker.tar.gz --strip-components 1
 chmod +x ./smoker
 ./smoker -version
