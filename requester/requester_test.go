@@ -122,7 +122,7 @@ func TestRequest(t *testing.T) {
 				Name: "test",
 				URL:  "example.com",
 				Assertions: core.Assertions{
-					Header: map[string]string{"Content-Type": "application/json"},
+					Headers: map[string]string{"Content-Type": "application/json"},
 				},
 			},
 			mockStatusCode: 200,
@@ -135,7 +135,7 @@ func TestRequest(t *testing.T) {
 				Name: "test",
 				URL:  "example.com",
 				Assertions: core.Assertions{
-					Header: map[string]string{"Content-Type": "application/json"},
+					Headers: map[string]string{"Content-Type": "application/json"},
 				},
 			},
 			mockStatusCode: 200,
@@ -147,7 +147,7 @@ func TestRequest(t *testing.T) {
 				Name: "test",
 				URL:  "example.com",
 				Assertions: core.Assertions{
-					Header: map[string]string{"access-control-allow-origin": "*", "content-length": "[0-9]+"},
+					Headers: map[string]string{"access-control-allow-origin": "*", "content-length": "[0-9]+"},
 				},
 			},
 			mockStatusCode: 200,

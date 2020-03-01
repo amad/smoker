@@ -37,5 +37,5 @@ type TestCase struct {
 type Assertions struct {
 	StatusCode int               `json:"statusCode"`
 	Body       []string          `json:"body"`
-	Header     map[string]string `json:"header"`
+	Headers    map[string]string `json:"headers"`
 }
