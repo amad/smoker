@@ -4,8 +4,8 @@
 [![Build Status](https://travis-ci.org/amad/smoker.svg?branch=master)](https://travis-ci.org/amad/smoker)
 [![Go Report Card](https://goreportcard.com/badge/github.com/amad/smoker)](https://goreportcard.com/report/github.com/amad/smoker)
 [![codecov](https://codecov.io/gh/amad/smoker/branch/master/graph/badge.svg)](https://codecov.io/gh/amad/smoker)
-[![Docker Pulls](https://img.shields.io/docker/pulls/stunt/smoker.svg?maxAge=604800)](https://hub.docker.com/r/stunt/smoker/tags)
 [![License: MPL2.0](https://img.shields.io/badge/license-MPL2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+[![Releases](https://img.shields.io/github/v/release/amad/smoker.svg?include_prereleases)](https://github.com/amad/smoker/releases)
 
 Fast smoke-testing tool for APIs and WEB with concurrency support.
 
