@@ -174,8 +174,10 @@ func TestRequest(t *testing.T) {
 					}
 				}
 
-				if userAgent, ok := req.Header["User-Agent"]; !ok {
-					t.Fatal("Expected to send User-Agent header but got <nil>")
+				if userAgent, ok := req.Header["User-Agent"]; true {
+					if !ok {
+						t.Fatal("Expected to send User-Agent header but got <nil>")
+					}
 
 					if userAgent[0] != expectedUserAgent {
 						t.Fatalf("Header User-Agent does not match\nexpected: %s\nreceived: %s", expectedUserAgent, userAgent[0])
