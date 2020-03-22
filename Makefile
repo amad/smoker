@@ -13,6 +13,8 @@ clean:
 	rm -f smoker
 	rm -f bin/smoker*
 	rm -f dist/smoker*
+	mkdir -p bin
+	mkdir -p dist
 .PHONY: clean
 
 lint:
