@@ -1,10 +1,11 @@
-FROM golang:1.13-alpine
+FROM golang:1.14-alpine as go-builder
 
 LABEL maintainer="Ahmad Samiei"
 
 ENV GOPATH /go
 ENV CGO_ENABLED 0
 ENV GO111MODULE on
+ENV GOPROXY https://proxy.golang.org
 
 RUN  \
     apk add --no-cache git && \
@@ -13,7 +14,7 @@ RUN  \
 
 FROM alpine:3.10
 
-COPY --from=0 /go/bin/smoker /usr/bin/smoker
+COPY --from=go-builder /go/bin/smoker /usr/bin/smoker
 
 RUN \
     chmod +x /usr/bin/smoker

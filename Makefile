@@ -42,4 +42,4 @@ release: clean
 
 dockerbuild:
 	docker build --tag smoker:$(git describe --abbrev=0) .
-.PHONY: docker
+.PHONY: dockerbuild
